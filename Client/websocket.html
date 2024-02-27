@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- WebSocket client script -->
+<script>
+    // Create a new WebSocket instance and connect to the server
+    let ws = new WebSocket('ws://localhost:3001');
+    // Log the WebSocket object to the console
+    console.log(ws);
+
+    // Event handler for when the WebSocket connection is opened
+    ws.onopen = function (event) {
+        console.log('WebSocket connection opened:', event);
+        ws.send("I'm connected to the server 🥳")
+    }
+
+    // Event handler for when a message is received from the server
+    ws.onmessage = function (event) {
+        console.log('Message received from server:', event);
+    }
+</script>
+
+</body>
+</html>
