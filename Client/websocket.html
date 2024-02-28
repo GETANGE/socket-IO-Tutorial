@@ -3,27 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>WebSocket Chat</title>
 </head>
 <body>
-<!-- WebSocket client script -->
-<script>
-    // Create a new WebSocket instance and connect to the server
-    let ws = new WebSocket('ws://localhost:3001');
-    // Log the WebSocket object to the console
-    console.log(ws);
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
 
-    // Event handler for when the WebSocket connection is opened
-    ws.onopen = function (event) {
-        console.log('WebSocket connection opened:', event);
-        ws.send("I'm connected to the server 🥳")
-    }
+        #chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+        }
 
-    // Event handler for when a message is received from the server
-    ws.onmessage = function (event) {
-        console.log('Message received from server:', event);
-    }
-</script>
+        #message-input {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            outline: none;
+        }
 
+        #send-button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #chat-messages {
+            margin-top: 20px;
+            overflow-y: auto;
+            max-height: 300px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+    <!-- WebSocket client script -->
+    <script>
+        // Create a new WebSocket instance and connect to the server
+        let ws = new WebSocket('ws://localhost:3001');
+        
+        // Log the WebSocket object to the console
+        console.log(ws);
+
+        // Event handler for when the WebSocket connection is opened
+        ws.onopen = function (event) {
+            console.log('WebSocket connection opened:', event);
+            ws.send("I'm connected to the server 🥳");
+        }
+
+        // Event handler for when a message is received from the server
+        ws.onmessage = function (event) {
+            console.log('Message received from server:', event.data);
+            displayMessage(event.data);
+        }
+
+        // Function to display a message in the chat area
+        function displayMessage(message) {
+            const chatMessages = document.getElementById('chat-messages'); // Corrected ID
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+        }
+
+
+        // Function to send a message to the server
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value;
+            ws.send(message);
+            messageInput.value = ''; // Clear the input field after sending
+        }
+    </script>
+
+    <!-- Chat UI -->
+    <div id="chat-container">
+        <div id="chat-messages" style="height: 200px; overflow: auto; border: 1px solid #ccc; padding: 10px;"></div>
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()" id="send-button" >Send</button>
+    </div>
 </body>
 </html>
