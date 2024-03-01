@@ -16,13 +16,11 @@
         socket.on('connect', () => {
             console.log(socket.id, 'has connected');
         });
-
-        socket.emit('Message from client', {
-            data: 'Hello from the browser'
-        })
-
         socket.on('Message from server', (data) => {
             console.log(data);
+        })
+        socket.emit('Message from client', {
+            data: 'Hello from the browser'
         })
     </script>
 </body>
